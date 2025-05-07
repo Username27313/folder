@@ -32,19 +32,21 @@
   }).addTo(map);
 
   // 3. Vẽ đa giác tam giác cho Công viên Hùng Vương
+  /*
   var polygon = L.polygon([
     [9.179463625592895, 105.15103970602608],
     [9.176619813322873, 105.15095387533913],
     [9.178441550433492, 105.15228961533566]
-  ], {
+  ],*/ 
+  ?.circle([9.181099723775581, 105.16298591946129]) {
     color: 'red',       // Màu viền đỏ
     fillColor: 'blue',   // Màu nền vàng
     fillOpacity: 0.5,       // Độ trong suốt
-    weight: 4               // Độ rộng viền
+    radius: 200               // Độ rộng viền
   }).addTo(map);
 
   // 4. Gắn popup hiển thị tên công viên
-  polygon.bindPopup("Công viên Hùng Vương").openPopup();
+  polygon.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
 
   // 5. Tự động zoom vừa vùng chứa tam giác
   map.fitBounds(polygon.getBounds());
