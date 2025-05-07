@@ -23,34 +23,23 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-  // 1. Khởi tạo bản đồ tại vị trí gần trung tâm công viên
   var map = L.map('map').setView([9.1783, 105.1514], 18);
 
-  // 2. Thêm lớp nền bản đồ OpenStreetMap
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  // 3. Vẽ đa giác tam giác cho Công viên Hùng Vương
-  /*
-  var polygon = L.polygon([
-    [9.179463625592895, 105.15103970602608],
-    [9.176619813322873, 105.15095387533913],
-    [9.178441550433492, 105.15228961533566]
-  ],*/ 
-  L.circle([9.181099723775581, 105.16298591946129]) {
-    color: 'red',       // Màu viền đỏ
-    fillColor: 'blue',   // Màu nền vàng
-    fillOpacity: 0.5,       // Độ trong suốt
-    radius: 200               // Độ rộng viền
+  var circle = L.circle([9.181099723775581, 105.16298591946129], {
+    color: 'red',
+    fillColor: 'blue',
+    fillOpacity: 0.5,
+    radius: 200
   }).addTo(map);
 
-  // 4. Gắn popup hiển thị tên công viên
-  //polygon.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
-
-  // 5. Tự động zoom vừa vùng chứa tam giác
-  map.fitBounds(polygon.getBounds());
+  circle.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
+  map.fitBounds(circle.getBounds());
 </script>
+
 
 </body>
 </html>
