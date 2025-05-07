@@ -1,65 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hiển thị Bản đồ với Leaflet</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link CSS Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        #map { height: 500px; width: 100%; }
-    </style>
+  <title>Bản đồ Công viên Hùng Vương</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Thư viện Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    #map {
+      height: 600px; /* Chiều cao bản đồ */
+    }
+  </style>
 </head>
 <body>
-    <h3>Bản đồ của tôi</h3>
-    <div id="map"></div>
 
-    <!-- Link JS Leaflet -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Khởi tạo map, đặt tọa độ và zoom mặc định
-        var map = L.map('map').setView([9.178, 105.157], 16);
+<h3>Bản đồ Công viên Hùng Vương</h3>
+<div id="map"></div>
 
-        // Load tiles từ OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+<!-- Thư viện Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-        // Thêm marker
-        L.circle([9.18060, 105.16363], {
-            color: 'blue',
-            fillcolor: '#30f',
-            fillOpacity: 0.5,
-            radius: 200
-                }).addTo(map)
-            .bindPopup('Trường cao đẳng cộng đồng Cà Mau')
-            .openPopup();
-        
-        L.marker([9.176606, 105.151608]).addTo(map)
-            .bindPopup('UBND Tỉnh Cà Mau')
-            .openPopup();
+<script>
+  // 1. Khởi tạo bản đồ tại vị trí gần trung tâm công viên
+  var map = L.map('map').setView([9.1783, 105.1514], 18);
 
-        const latlngs = [
-        [9.17584831201339, 105.15076072192856],
-        [9.175877438761141, 105.15105308272081],    
-        [9.175268424446783, 105.15188724975191],
-        [9.17509631151626, 105.15021891568972],
-        [9.17584831201339, 105.15076072192856]
-        ];
+  // 2. Thêm lớp nền bản đồ OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
-        const polyline = L.polyline(latlngs, {
-            color: 'black',       // Màu đường
-            weight: 1,          // Độ dày
-            opacity: 2,       // Độ đậm nhạt
-            smoothFactor: 1     // Độ làm mượt
-        }).addTo(map);
+  // 3. Vẽ đa giác tam giác cho Công viên Hùng Vương
+  var polygon = L.polygon([
+    [9.179460, 105.150988],
+    [9.178602, 105.152200],
+    [9.176907, 105.150955]
+  ], {
+    color: '#ff0000',       // Màu viền đỏ
+    fillColor: '#ffff00',   // Màu nền vàng
+    fillOpacity: 0.5,       // Độ trong suốt
+    weight: 4               // Độ rộng viền
+  }).addTo(map);
 
-        const marker = L.marker([9.178770, 105.151671]).addTo(map);
-        marker.bindPopup('Trường cao đẳng cộng đồng Cà Mau');
+  // 4. Gắn popup hiển thị tên công viên
+  polygon.bindPopup("Công viên Hùng Vương").openPopup();
 
-        marker.on('click', function () {
-        marker.openPopup();
-        });
-    </script>
+  // 5. Tự động zoom vừa vùng chứa tam giác
+  map.fitBounds(polygon.getBounds());
+</script>
+
 </body>
 </html>
