@@ -10,7 +10,7 @@
 
   <style>
     #map {
-      height: 500px; /* Chiều cao bản đồ */
+      height: 500px;
     }
   </style>
 </head>
@@ -18,6 +18,10 @@
 
 <h3>Bản đồ trường cao đẳng cộng đồng Cà Mau</h3>
 <div id="map"></div>
+<p>Tọa độ hiện tại: <span id="coords">Chưa chọn</span></p>
+<button onclick="saveLocation()">Lưu vị trí</button>
+<h4>Danh sách vị trí đã lưu:</h4>
+<ul id="saved-list"></ul>
 
 <!-- Thư viện Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -38,8 +42,48 @@
 
   circle.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
   map.fitBounds(circle.getBounds());
-</script>
 
+  var currentMarker = null;
+  var currentLatLng = null;
+  var savedLocations = [];
+
+  // Click trên bản đồ
+  map.on('click', function(e) {
+    currentLatLng = e.latlng;
+
+    if (currentMarker) {
+      currentMarker.setLatLng(e.latlng);
+    } else {
+      currentMarker = L.marker(e.latlng).addTo(map);
+    }
+
+    document.getElementById('coords').textContent =
+      `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+  });
+
+  // Hàm lưu vị trí
+  function saveLocation() {
+    if (!currentLatLng) {
+      alert("Bạn chưa chọn vị trí!");
+      return;
+    }
+
+    savedLocations.push(currentLatLng);
+
+    var marker = L.marker(currentLatLng).addTo(map);
+    var info = `Vị trí ${savedLocations.length}: ${currentLatLng.lat.toFixed(6)}, ${currentLatLng.lng.toFixed(6)}`;
+    marker.bindPopup(info).openPopup();
+
+    var li = document.createElement("li");
+    li.textContent = info;
+    document.getElementById("saved-list").appendChild(li);
+
+    currentMarker.remove();
+    currentMarker = null;
+    currentLatLng = null;
+    document.getElementById('coords').textContent = "Chưa chọn";
+  }
+</script>
 
 </body>
 </html>
