@@ -7,6 +7,7 @@
 
   <!-- Thư viện Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-o4phb1k2eJRY1O9gR5EY9ztq9JUEE/z9xPcI5DU8xJ1PzgA5F9gU5wrGQ4hljyoG" crossorigin="anonymous" />
 
   <style>
     #map {
@@ -19,7 +20,7 @@
 <h3>Bản đồ trường cao đẳng cộng đồng Cà Mau</h3>
 <div id="map"></div>
 <p>Tọa độ hiện tại: <span id="coords">Chưa chọn</span></p>
-<button onclick="saveLocation()">Lưu vị trí</button>
+<button onclick="saveLocation()"><i class="fas fa-save"></i> Lưu vị trí</button>
 <h4>Danh sách vị trí đã lưu:</h4>
 <ul id="saved-list"></ul>
 
@@ -32,16 +33,6 @@
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
-
-  var circle = L.circle([9.181099723775581, 105.16298591946129], {
-    color: 'red',
-    fillColor: 'blue',
-    fillOpacity: 0.5,
-    radius: 200
-  }).addTo(map);
-
-  circle.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
-  map.fitBounds(circle.getBounds());
 
   var currentMarker = null;
   var currentLatLng = null;
