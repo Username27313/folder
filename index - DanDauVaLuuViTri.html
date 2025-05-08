@@ -1,65 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hiển thị Bản đồ với Leaflet</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link CSS Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        #map { height: 500px; width: 100%; }
-    </style>
+  <title>Chọn vị trí trên bản đồ</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 500px;
+    }
+    #coords {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #saved-list {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <h3>Bản đồ của tôi</h3>
-    <div id="map"></div>
 
-    <!-- Link JS Leaflet -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Khởi tạo map, đặt tọa độ và zoom mặc định
-        var map = L.map('map').setView([9.178, 105.157], 16);
+<h3>Bản đồ trường cao đẳng cộng đồng Cà Mau</h3>
+<div id="map"></div>
+<div id="coords">Chưa chọn</div>
+<button onclick="saveLocation()">Lưu vị trí</button>
+<ul id="saved-list"></ul>
 
-        // Load tiles từ OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  var map = L.map('map').setView([9.1783, 105.1514], 18);
 
-        // Thêm marker
-        L.circle([9.18060, 105.16363], {
-            color: 'blue',
-            fillcolor: '#30f',
-            fillOpacity: 0.5,
-            radius: 200
-                }).addTo(map)
-            .bindPopup('Trường cao đẳng cộng đồng Cà Mau')
-            .openPopup();
-        
-        L.marker([9.176606, 105.151608]).addTo(map)
-            .bindPopup('UBND Tỉnh Cà Mau')
-            .openPopup();
+  // Thêm lớp nền bản đồ
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
-        const latlngs = [
-        [9.17584831201339, 105.15076072192856],
-        [9.175877438761141, 105.15105308272081],    
-        [9.175268424446783, 105.15188724975191],
-        [9.17509631151626, 105.15021891568972],
-        [9.17584831201339, 105.15076072192856]
-        ];
+  // Vùng highlight Trường Cao đẳng Cộng đồng Cà Mau
+  var circle = L.circle([9.181099723775581, 105.16298591946129], {
+    color: 'red',
+    fillColor: 'blue',
+    fillOpacity: 0.5,
+    radius: 200
+  }).addTo(map);
+  circle.bindPopup("Trường Cao Đẳng Cộng Đồng Cà Mau").openPopup();
+  map.fitBounds(circle.getBounds());
 
-        const polyline = L.polyline(latlngs, {
-            color: 'red',       // Màu đường
-            weight: 1,          // Độ dày
-            opacity: 2,       // Độ đậm nhạt
-            smoothFactor: 1     // Độ làm mượt
-        }).addTo(map);
+  // Biến lưu trữ vị trí
+  var currentLatLng = null;
+  var currentMarker = null;
+  var savedLocations = [];
 
-        const marker = L.marker([9.18060, 105.16363]).addTo(map);
-        marker.bindPopup('Trường cao đẳng cộng đồng Cà Mau');
+  // Click trên bản đồ
+  map.on('click', function(e) {
+    currentLatLng = e.latlng;
 
-        marker.on('click', function () {
-        marker.openPopup();
-        });
-    </script>
+    if (currentMarker) {
+      currentMarker.setLatLng(e.latlng);
+    } else {
+      currentMarker = L.marker(e.latlng).addTo(map);
+    }
+
+    document.getElementById('coords').textContent =
+      `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+  });
+
+  // Hàm lưu vị trí
+  function saveLocation() {
+    if (!currentLatLng) {
+      alert("Bạn chưa chọn vị trí!");
+      return;
+    }
+
+    // Lưu vào mảng
+    savedLocations.push(currentLatLng);
+
+    // Tạo marker cố định với popup
+    var marker = L.marker(currentLatLng).addTo(map);
+    var info = `Vị trí ${savedLocations.length}: ${currentLatLng.lat.toFixed(6)}, ${currentLatLng.lng.toFixed(6)}`;
+    marker.bindPopup(info).openPopup();
+
+    // Thêm vào danh sách HTML
+    var li = document.createElement("li");
+    li.textContent = info;
+    document.getElementById("saved-list").appendChild(li);
+
+    // Xóa marker tạm thời
+    currentMarker.remove();
+    currentMarker = null;
+    currentLatLng = null;
+    document.getElementById('coords').textContent = "Chưa chọn";
+  }
+</script>
+
 </body>
 </html>
