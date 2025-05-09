@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lê Hoài Phúc</title>
+  <title>Chọn vị trí trên bản đồ</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -39,12 +39,17 @@
   var savedLocations = [];
 
   // Vẽ vòng tròn tại tượng đài Cà Mau
-  L.circle([9.176205, 105.150860], {
+  var circle = L.circle([9.176205, 105.150860], {
     color: 'red',
-    fillColor: '#0000ff',
+    fillColor: '#00ff00',
     fillOpacity: 0.2,
-    radius: 60
+    radius: 60 // Bán kính là 60 mét, tương đương đường kính 120 mét
   }).addTo(map);
+
+  // Thêm popup khi click vào vòng tròn
+  circle.on('click', function() {
+    circle.bindPopup("Vòng tròn đường kính 120m").openPopup();
+  });
 
   // Marker tại tượng đài Cà Mau
   var caMauMarker = L.marker([9.176205, 105.150860]).addTo(map).bindPopup("Tượng đài Cà Mau").openPopup();
