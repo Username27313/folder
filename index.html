@@ -38,6 +38,17 @@
   var currentLatLng = null;
   var savedLocations = [];
 
+  // Vẽ vòng tròn tại tượng đài Cà Mau
+  L.circle([9.176205, 105.150860], {
+    color: 'red',
+    fillColor: '#00ff00',
+    fillOpacity: 0.2,
+    radius: 60
+  }).addTo(map);
+
+  // Marker tại tượng đài Cà Mau
+  var caMauMarker = L.marker([9.176205, 105.150860]).addTo(map).bindPopup("Tượng đài Cà Mau").openPopup();
+
   // Click trên bản đồ
   map.on('click', function(e) {
     currentLatLng = e.latlng;
@@ -48,8 +59,7 @@
       currentMarker = L.marker(e.latlng).addTo(map);
     }
 
-    document.getElementById('coords').textContent =
-      `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+    document.getElementById('coords').textContent = `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
   });
 
   // Hàm lưu vị trí
